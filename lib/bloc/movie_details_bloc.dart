@@ -11,37 +11,30 @@ part 'movie_details_state.dart';
 
 class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
   MovieDetailsBloc(this.httpClient) : super(MovieDetailsState(movieId: '')) {
-    /*on<MovieDetailsGet>(_movieDetailsGet);
-    on<MarkFav>(_markFav);*/
+    on<MovieDetailsGet>(_movieDetailsGet);
+    on<MarkFav>(_markFav);
   }
 
   final http.Client httpClient;
-/*
+
   FutureOr<void> _movieDetailsGet(
       MovieDetailsGet event, Emitter<MovieDetailsState> emit) async {
     try {
-      if (state.status == MovieDetailStatus.initial) {
-        final movie = await _fetchMovie();
-        return emit(state.copyWith(
-            status: MovieListstatus.success,
-            movies: movies.results,
-            hasReachedMax: false,
-            lastPageFetched: 1));
-      }
-      final movies = await _fetchMovies(state.lastPageFetched + 1);
-      emit(movies.results!.isEmpty
-          ? state.copyWith(hasReachedMax: true)
-          : state.copyWith(
-              status: MovieListstatus.success,
-              movies: List.of(state.movies)..addAll(movies.results!),
-              hasReachedMax: false,
-              lastPageFetched: state.lastPageFetched + 1));
+      final movie = await _fetchMovie(state.movieId);
+      return emit(MovieDetailsState(
+          movie: movie,
+          movieId: state.movieId,
+          status: MovieDetailStatus.success));
     } catch (_) {
-      emit(state.copyWith(status: MovieListstatus.failure));
+      emit(MovieDetailsState(
+          movieId: state.movieId, status: MovieDetailStatus.failure));
     }
   }
 
-  FutureOr<void> _markFav(MarkFav event, Emitter<MovieDetailsState> emit) {}
+  FutureOr<void> _markFav(MarkFav event, Emitter<MovieDetailsState> emit) {
+    emit(MovieDetailsState(
+        movieId: state.movieId, status: MovieDetailStatus.failure));
+  }
 
   Future<MovieDetailResponse> _fetchMovie(String id) async {
     final response = await httpClient.get(Uri.parse(
@@ -51,5 +44,5 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
       return MovieDetailResponse.fromJson(body);
     }
     throw Exception('error fetching movies');
-  }*/
+  }
 }

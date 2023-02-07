@@ -1,10 +1,10 @@
 part of 'movie_details_bloc.dart';
 
-enum MovieDetailStatus { initial, success, failure, fav }
+enum MovieDetailStatus { loading, success, failure, fav }
 
 class MovieDetailsState extends Equatable {
   const MovieDetailsState(
-      {this.status = MovieDetailStatus.initial,
+      {this.status = MovieDetailStatus.loading,
       required this.movieId,
       this.isFav = false,
       this.movie});
